@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> PERFORMANCE GRAPH </title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+   
+<style>
+    
+    #measurementForm input{
+        border-radius: 10px;
+        background-color: aquamarine;
+        text-align: center;
+    }
+    button{
+        background-color: aqua;
+        border-radius: 50px;
+    
+    }
+    
+
+</style>
+
+</head>
+
+<body style="background-color: antiquewhite;">
+    <h4 style="text-align:center;color: brown;">HIGH PRESSURE-LOW IMMERSION RR50 SERIES</h4>
+
+    <div style="width:100%;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <div style="text-align:center;">
+        <form id="measurementForm"></br>
+            <label for="fname"style="border: radias 20px;">Discharge LPM:</label><br>
+            <input type="text" id="fname" name="fname" placeholder="Enter A value" ><br>
+            <label for="lname">Head In Meters:</label><br>
+            <input type="text" id="lname" name="lname" placeholder="Enter A value">
+        </form>
+        <br>
+        <button onclick="submitMeasurements()"">Submit</button>
+        
+    </div>
+ 
+    <script>
+        var formSubmitted = false;
+  
+        var data = {
+            datasets: [{
+                    label: 'RR50 LP',
+                    data: [{
+                        x: 0.3,
+                        y: 23
+                    }, {
+                        x: 60,
+                        y: 0
+                    }],
+                    type: 'scatter',
+                    backgroundColor: 'rgba(255, 99, 132, 0.8)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                    showLine: true
+                },
+                {
+                    label: 'RR50 HP',
+                    data: [{
+                        x: 0.4,
+                        y: 42
+                    }, {
+                        x: 60,
+                        y: 0
+                    }],
+                    type: 'scatter',
+                    backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                    showLine: true
+                },
+                {
+                    label: 'RR50-2',
+                    data: [{
+                        x: 0.5,
+                        y: 68
+                    }, {
+                        x: 56,
+                        y: 0
+                    }],
+                    type: 'scatter',
+                    backgroundColor: 'rgba(255, 205, 86, 0.8)',
+                    borderColor: 'rgba(255, 205, 86, 1)',
+                    borderWidth: 2,
+                    pointRadius: 8,
+                    pointHoverRadius: 10,
+                    showLine: true
+                }
+            ]
+        };
+
+        var options = {
+            scales: {
+                y: {
+                    type: 'linear',
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Head in (Meters)'
+                    }
+                },
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: 'Discharge (LPM)'
+                    }
+                }
+            },
+            elements: {
+                line: {
+                    tension: 0.4
+                }
+            }
+        };
+
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+
+        function submitMeasurements() {
+            if (formSubmitted) {
+                alert("You have already submitted measurements. Please reload the page to enter new values.");
+                return;
+            }
+
+            var enteredDischarge = parseFloat(document.getElementById('fname').value);
+            var enteredHead = parseFloat(document.getElementById('lname').value);
+
+            var userDataset = {
+                label: 'User Input',
+                data: [{
+                    x: enteredDischarge,
+                    y: enteredHead
+                }],
+                type: 'scatter',
+                backgroundColor: 'rgba(0, 0, 255, 0.8)',
+                borderColor: 'rgba(0, 0, 255, 1)',
+                borderWidth: 2,
+                pointRadius: 8,
+                pointHoverRadius: 10,
+                showLine: true
+            };
+
+            myChart.data.datasets.push(userDataset);
+            myChart.update();
+
+            document.getElementById('measurementForm').disabled = true;
+            formSubmitted = true;
+        }
+    </script>
+</body>
+
+</html>
